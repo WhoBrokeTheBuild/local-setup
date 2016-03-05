@@ -1,9 +1,13 @@
 #!/bin/sh
 
-read -p "Install Atom Plugins (y/n)? " choice
+read -p "Install Atom (y/n)? " choice
 case "$choice" in
   y|Y )
 
+    curl -o atom.rpm https://atom.io/download/rpm
+    sudo dnf install ./atom.rpm
+    /usr/bin/rm -f atom.rpm
+    
     apm install \
         language-cmake language-flatbuffers language-lua language-batch \
         language-bison language-cpp14 language-docker language-lex-flex \
