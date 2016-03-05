@@ -7,7 +7,7 @@ case "$choice" in
     curl -o atom.rpm https://atom.io/download/rpm
     sudo dnf install ./atom.rpm
     /usr/bin/rm -f atom.rpm
-    
+
     apm install \
         language-cmake language-flatbuffers language-lua language-batch \
         language-bison language-cpp14 language-docker language-lex-flex \
@@ -26,6 +26,16 @@ case "$choice" in
     sudo dnf install -y zsh hub
     sh -c "$(curl -fsSL https://raw.github.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"
     /usr/bin/cp -f .zshrc ~/.zshrc
+
+  ;;
+esac
+
+read -p "Configure Git (y/n)? " choice
+case "$choice" in
+  y|Y )
+
+    git config --global user.name "Stephen Lane-Walsh"
+    git config --global user.email "sdl.slane@gmail.com"
 
   ;;
 esac
