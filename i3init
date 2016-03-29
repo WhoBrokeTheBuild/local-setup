@@ -1,0 +1,22 @@
+#!/bin/sh
+
+i3-msg workspace 2
+i3-msg layout stacking
+i3-exec-wait gnome-terminal
+i3-exec-wait atom
+sleep 2
+
+i3-msg focus parent
+i3-msg split h
+i3-exec-wait gnome-terminal
+i3-msg resize shrink width
+i3-msg resize shrink width
+
+i3-msg workspace 3
+i3-msg layout default
+i3-exec-wait firefox
+sleep 2
+
+i3-msg workspace 1
+i3-msg layout default
+i3-exec-wait google-chrome
