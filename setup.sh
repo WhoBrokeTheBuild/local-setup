@@ -2,6 +2,7 @@
 
 if [[ "$@" == "--help" ]]; then
     printf "  --no-update      Skip package update/upgrade\n"
+    printf "  --no-tools       Skip installing Tools\n"
     printf "  --no-chrome      Skip installing Google Chrome\n"
     printf "  --no-rpmfusion   Skip adding RPM-Fusion Repositories\n"
     printf "  --no-atom        Skip installing Atom\n"
