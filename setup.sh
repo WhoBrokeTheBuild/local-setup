@@ -5,6 +5,7 @@ if [[ "$@" == "--help" ]]; then
     printf "  --no-tools       Skip installing Tools\n"
     printf "  --no-chrome      Skip installing Google Chrome\n"
     printf "  --no-rpmfusion   Skip adding RPM-Fusion Repositories\n"
+    printf "  --no-vim         Skip installing Vim\n"
     printf "  --no-atom        Skip installing Atom\n"
     printf "  --no-zsh         Skip installing ZSH\n"
     printf "  --no-shell-ext   Skip installing Gnome Shell Extensions\n"
@@ -55,6 +56,20 @@ if [[ "$@" != *"--no-rpmfusion"* ]]; then
     setup__rpmfusion
 fi
 
+setup__vim()
+{
+    printf "### Installing Vim ###\n"
+    sudo dnf install -y vim
+    rm -rf ~/.vim/bundle/Vundle.vim
+    git clone https://github.com/VundleVim/Vundle.vim.git ~/.vim/bundle/Vundle.vim
+    /usr/bin/cp -rf .vim ~/
+    /usr/bin/cp -f .vimrc ~/
+    printf "\n"
+}
+if [[ "$@" != *"--no-vim"* ]]; then
+    setup__vim
+fi
+
 setup__atom()
 {
     printf "### Installing Atom ###\n"
@@ -79,7 +94,7 @@ setup__zsh()
     printf "### Installing ZSH ###\n"
     sudo dnf install -y zsh hub
     sh -c "$(curl -fsSL https://raw.github.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"
-    /usr/bin/cp -f .zshrc ~/.zshrc
+    /usr/bin/cp -f .zshrc ~/
     printf "\n"
 }
 if [[ "$@" != *"--no-zsh"* ]]; then
@@ -112,6 +127,7 @@ setup__git()
     sudo dnf install -y git
     git config --global user.name "Stephen Lane-Walsh"
     git config --global user.email "sdl.slane@gmail.com"
+    git config --global core.editor /usr/bin/vim
     printf "\n"
 }
 if [[ "$@" != *"--no-git"* ]]; then
@@ -133,10 +149,15 @@ setup__i3()
 {
     printf "### Installing i3 ###\n"
     sudo dnf install -y i3 dmenu xbacklight i3status i3lock feh conky
-    /bin/cp i3config ~/.config/i3/config
+
+    /bin/cp -rf .config/i3 ~/.config/
+    /bin/cp -rf .config/i3status ~/.config/
     sudo /bin/cp i3-exec-wait /usr/local/bin/
     sudo /bin/cp i3init /usr/local/bin/
     sudo /bin/cp i3.session /usr/share/gnome-session/sessions/i3.session
+
+    /bin/cp bg/i3background.jpg ~/Pictures/i3background.jpg
+
     printf "\n"
 }
 if [[ "$@" != *"--no-i3"* ]]; then
