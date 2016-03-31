@@ -81,7 +81,7 @@ setup__atom()
         language-cmake language-flatbuffers language-lua language-batch \
         language-bison language-cpp14 language-docker language-lex-flex \
         switch-header-source autocomplete-clang build build-make linter-clang \
-        less-than-slash pigments minimap
+        less-than-slash pigments minimap emmet-simplified
     sudo dnf install -y clang
     printf "\n"
 }

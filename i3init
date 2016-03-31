@@ -21,7 +21,3 @@ i3-msg workspace 1
 i3-msg layout default
 i3-exec-wait google-chrome
 
-i3-msg rename workspace 1 to chrome
-i3-msg rename workspace 2 to code
-i3-msg rename workspace 3 to firefox
-i3-msg rename workspace 4 to vm
