@@ -149,7 +149,40 @@ mode "resize" {
         bindsym Escape mode "default"
 }
 
+mode "mouse" {
+    bindsym Left exec xdotool mousemove_relative -- -60 0
+    bindsym Right exec xdotool mousemove_relative -- 60 0
+    bindsym Up exec xdotool mousemove_relative -- 0 -60
+    bindsym Down exec xdotool mousemove_relative -- 0 60
+
+    bindsym Shift+Left exec xdotool mousemove_relative -- -10 0
+    bindsym Shift+Right exec xdotool mousemove_relative -- 10 0
+    bindsym Shift+Up exec xdotool mousemove_relative -- 0 -10
+    bindsym Shift+Down exec xdotool mousemove_relative -- 0 10
+
+    bindsym Return exec xdotool click 1;
+    bindsym Shift+Return exec xdotool mousedown 1; mode "drag"
+    bindsym Control+Return exec xdotool click 3; mode "default"
+    bindsym Escape mode "default"
+}
+
+mode "drag" {
+    bindsym Left exec xdotool mousemove_relative -- -60 0
+    bindsym Right exec xdotool mousemove_relative -- 60 0
+    bindsym Up exec xdotool mousemove_relative -- 0 -60
+    bindsym Down exec xdotool mousemove_relative -- 0 60
+
+    bindsym Shift+Left exec xdotool mousemove_relative -- -10 0
+    bindsym Shift+Right exec xdotool mousemove_relative -- 10 0
+    bindsym Shift+Up exec xdotool mousemove_relative -- 0 -10
+    bindsym Shift+Down exec xdotool mousemove_relative -- 0 10
+
+    bindsym Return exec xdotool mouseup 1; mode "default"
+    bindsym Control+Return exec xdotool mouseup 1; exec xdotool click 3; mode "default"
+}
+
 bindsym $mod+r mode "resize"
+bindsym $mod+m mode "mouse"
 
 # Start i3bar to display a workspace bar (plus the system information i3status
 # finds out, if available)

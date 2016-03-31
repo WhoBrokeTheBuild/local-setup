@@ -148,7 +148,7 @@ fi
 setup__i3()
 {
     printf "### Installing i3 ###\n"
-    sudo dnf install -y i3 dmenu xbacklight i3status i3lock feh conky
+    sudo dnf install -y i3 dmenu xbacklight i3status i3lock feh conky xdotool
 
     /bin/cp -rf .config/i3 ~/.config/
     /bin/cp -rf .config/i3status ~/.config/
