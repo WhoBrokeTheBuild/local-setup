@@ -28,7 +28,7 @@ fi
 setup__tools()
 {
     printf "### Installing Tools ###\n"
-    sudo dnf install -y vim jq clang
+    sudo dnf install -y vim jq clang cmake
     printf "\n"
 }
 if [[ "$@" != *"--no-tools"* ]]; then
@@ -59,12 +59,13 @@ fi
 setup__vim()
 {
     printf "### Installing Vim ###\n"
-    sudo dnf install -y vim
+    sudo dnf install -y vim cmake clang python-devel
     rm -rf ~/.vim/bundle/Vundle.vim
     git clone https://github.com/VundleVim/Vundle.vim.git ~/.vim/bundle/Vundle.vim
     /usr/bin/cp -rf .vim ~/
     /usr/bin/cp -f .vimrc ~/
     vim +PluginInstall +qall
+    cd ~/.vim/bundle/youcompleteme && ./install.py --clang-completer
     printf "\n"
 }
 if [[ "$@" != *"--no-vim"* ]]; then
