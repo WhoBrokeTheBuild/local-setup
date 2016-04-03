@@ -64,6 +64,7 @@ setup__vim()
     git clone https://github.com/VundleVim/Vundle.vim.git ~/.vim/bundle/Vundle.vim
     /usr/bin/cp -rf .vim ~/
     /usr/bin/cp -f .vimrc ~/
+    vim +PluginInstall +qall
     printf "\n"
 }
 if [[ "$@" != *"--no-vim"* ]]; then
