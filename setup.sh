@@ -129,6 +129,7 @@ setup__git()
     git config --global user.name "Stephen Lane-Walsh"
     git config --global user.email "sdl.slane@gmail.com"
     git config --global core.editor /usr/bin/vim
+    git config --global push.default simple
     printf "\n"
 }
 if [[ "$@" != *"--no-git"* ]]; then
