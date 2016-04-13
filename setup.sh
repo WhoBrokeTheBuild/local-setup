@@ -1,5 +1,13 @@
 #!/bin/sh
 
+SOURCE="${BASH_SOURCE[0]}"
+while [ -h "$SOURCE" ]; do # resolve $SOURCE until the file is no longer a symlink
+  DIR="$( cd -P "$( dirname "$SOURCE" )" && pwd )"
+  SOURCE="$(readlink "$SOURCE")"
+  [[ $SOURCE != /* ]] && SOURCE="$DIR/$SOURCE" # if $SOURCE was a relative symlink, we need to resolve it relative to the path where the symlink file was located
+done
+DIR="$( cd -P "$( dirname "$SOURCE" )" && pwd )"
+
 if [[ "$@" == "--help" ]]; then
     printf "  --no-update      Skip package update/upgrade\n"
     printf "  --no-tools       Skip installing Tools\n"
@@ -65,7 +73,10 @@ setup__vim()
     /usr/bin/cp -rf .vim ~/
     /usr/bin/cp -f .vimrc ~/
     vim +PluginInstall +qall
+
     cd ~/.vim/bundle/youcompleteme && ./install.py --clang-completer
+    cd $DIR
+
     printf "\n"
 }
 if [[ "$@" != *"--no-vim"* ]]; then
@@ -155,11 +166,17 @@ setup__i3()
 
     /bin/cp -rf .config/i3 ~/.config/
     /bin/cp -rf .config/i3status ~/.config/
+    /bin/cp -f .i3blocks.conf ~/
     sudo /bin/cp i3-exec-wait /usr/local/bin/
     sudo /bin/cp i3init /usr/local/bin/
     sudo /bin/cp i3.session /usr/share/gnome-session/sessions/i3.session
 
     /bin/cp bg/i3background.jpg ~/Pictures/i3background.jpg
+
+    git clone git://github.com/vivien/i3blocks /tmp/i3blocks
+    cd /tmp/i3blocks
+    make clean all && sudo make install
+    cd $DIR
 
     printf "\n"
 }
