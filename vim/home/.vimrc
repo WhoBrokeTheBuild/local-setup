@@ -38,3 +38,7 @@ let g:airline_theme='powerlineish'
 " Molokai theme
 colorscheme molokai
 let g:rehash256=1
+
+set tabstop=4
+set shiftwidth=4
+set expandtab

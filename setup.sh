@@ -29,9 +29,6 @@ setup__update()
     sudo dnf update -y && sudo dnf upgrade -y
     printf "\n"
 }
-if [[ "$@" != *"--no-update"* ]]; then
-    setup__update
-fi
 
 setup__tools()
 {
@@ -39,9 +36,6 @@ setup__tools()
     sudo dnf install -y vim jq clang cmake
     printf "\n"
 }
-if [[ "$@" != *"--no-tools"* ]]; then
-    setup__tools
-fi
 
 setup__chrome()
 {
@@ -49,9 +43,6 @@ setup__chrome()
     sudo dnf install -y https://dl.google.com/linux/direct/google-chrome-stable_current_x86_64.rpm
     printf "\n"
 }
-if [[ "$@" != *"--no-chrome"* ]]; then
-    setup__chrome
-fi
 
 setup__rpmfusion()
 {
@@ -60,9 +51,6 @@ setup__rpmfusion()
         http://download1.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-23.noarch.rpm
     printf "\n"
 }
-if [[ "$@" != *"--no-rpmfusion"* ]]; then
-    setup__rpmfusion
-fi
 
 setup__vim()
 {
@@ -70,8 +58,7 @@ setup__vim()
     sudo dnf install -y vim cmake clang python-devel
     rm -rf ~/.vim/bundle/Vundle.vim
     git clone https://github.com/VundleVim/Vundle.vim.git ~/.vim/bundle/Vundle.vim
-    /usr/bin/cp -rf .vim ~/
-    /usr/bin/cp -f .vimrc ~/
+    /usr/bin/cp -rf vim/home/ ~/
     vim +PluginInstall +qall
 
     cd ~/.vim/bundle/youcompleteme && ./install.py --clang-completer
@@ -79,60 +66,40 @@ setup__vim()
 
     printf "\n"
 }
-if [[ "$@" != *"--no-vim"* ]]; then
-    setup__vim
-fi
 
 setup__atom()
 {
     printf "### Installing Atom ###\n"
-    curl -o atom.rpm https://atom.io/download/rpm
-    sudo dnf install -y ./atom.rpm
-    /usr/bin/rm -f atom.rpm
+    curl -o /tmp/atom.rpm https://atom.io/download/rpm
+    sudo dnf install -y /tmp/atom.rpm
 
     apm install \
         language-cmake language-flatbuffers language-lua language-batch \
         language-bison language-cpp14 language-docker language-lex-flex \
         switch-header-source autocomplete-clang build build-make linter-clang \
         less-than-slash pigments minimap emmet-simplified merge-conflicts
+
     sudo dnf install -y clang
+
     printf "\n"
 }
-if [[ "$@" != *"--no-atom"* ]]; then
-    setup__atom
-fi
 
 setup__zsh()
 {
     printf "### Installing ZSH ###\n"
     sudo dnf install -y zsh hub
-    sh -c "$(curl -fsSL https://raw.github.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"
-    /usr/bin/cp -f .zshrc ~/
+
+    git clone --depth=1 https://github.com/robbyrussell/oh-my-zsh.git ~/.oh-my-zsh
+    chsh -s $(grep /zsh$ /etc/shells | tail -1)
+
+    shopt -s dotglob
+
+    /usr/bin/cp -f zsh/home/* ~/
+
+    shopt -u dotglob
+
     printf "\n"
 }
-if [[ "$@" != *"--no-zsh"* ]]; then
-    setup__zsh
-fi
-
-setup__shell_extensions()
-{
-    printf "### Installing Gnome Shell Extensions ###\n"
-    sudo dnf install -y gnome-tweak-tool
-
-    GNOME_SHELL_VER=`gnome-shell --version | awk -F' ' '{printf $3}'`
-
-    sh shell-extension-install.sh $GNOME_SHELL_VER 442 # Drop Down Terminal
-    sh shell-extension-install.sh $GNOME_SHELL_VER 517 # Caffeine
-    sh shell-extension-install.sh $GNOME_SHELL_VER 800 # Remove Dropdown Arrows
-    sh shell-extension-install.sh $GNOME_SHELL_VER 906 # Sound Input & Output Device Chooser
-    sh shell-extension-install.sh $GNOME_SHELL_VER 277 # Impatience
-    sh shell-extension-install.sh $GNOME_SHELL_VER 352 # Quick Close in Overview
-    sh shell-extension-install.sh $GNOME_SHELL_VER 234 # Steal My Focus
-    printf "\n"
-}
-if [[ "$@" != *"--no-shell-ext"* ]]; then
-    setup__shell_extensions
-fi
 
 setup__git()
 {
@@ -144,9 +111,6 @@ setup__git()
     git config --global push.default simple
     printf "\n"
 }
-if [[ "$@" != *"--no-git"* ]]; then
-    setup__git
-fi
 
 setup__playonlinux()
 {
@@ -155,31 +119,68 @@ setup__playonlinux()
     sudo dnf install -y playonlinux
     printf "\n"
 }
-if [[ "$@" != *"--no-playonlinux"* ]]; then
-    setup__playonlinux
-fi
 
 setup__i3()
 {
     printf "### Installing i3 ###\n"
     sudo dnf install -y i3 dmenu xbacklight i3status i3lock feh conky xdotool
 
-    /bin/cp -rf .config/i3 ~/.config/
-    /bin/cp -rf .config/i3status ~/.config/
-    /bin/cp -f .i3blocks.conf ~/
-    sudo /bin/cp i3-exec-wait /usr/local/bin/
-    sudo /bin/cp i3init /usr/local/bin/
-    sudo /bin/cp i3.session /usr/share/gnome-session/sessions/i3.session
+    shopt -s dotglob
 
-    /bin/cp bg/i3background.jpg ~/Pictures/i3background.jpg
+    /bin/cp -rf i3/home/* ~/
+    sudo /bin/cp -rf i3/bin/* /usr/local/bin/
+    sudo /bin/cp i3/i3.session /usr/share/gnome-session/sessions/i3.session
+
+    shopt -u dotglob
 
     git clone git://github.com/vivien/i3blocks /tmp/i3blocks
     cd /tmp/i3blocks
     make clean all && sudo make install
     cd $DIR
 
+    git clone git://github.com/chjj/compton /tmp/compton
+    cd /tmp/compton
+    make && sudo make install
+    cd $DIR
+
+    pkill compton
+    compton --config ~/.i3/compton.conf -CGb
+
     printf "\n"
 }
-if [[ "$@" != *"--no-i3"* ]]; then
-    setup__i3
-fi
+
+main()
+{
+    if [[ "$@" != *"--no-update"* ]]; then
+        setup__update
+    fi
+    if [[ "$@" != *"--no-tools"* ]]; then
+        setup__tools
+    fi
+    if [[ "$@" != *"--no-chrome"* ]]; then
+        setup__chrome
+    fi
+    if [[ "$@" != *"--no-rpmfusion"* ]]; then
+        setup__rpmfusion
+    fi
+    if [[ "$@" != *"--no-vim"* ]]; then
+        setup__vim
+    fi
+    if [[ "$@" != *"--no-atom"* ]]; then
+        setup__atom
+    fi
+    if [[ "$@" != *"--no-zsh"* ]]; then
+        setup__zsh
+    fi
+    if [[ "$@" != *"--no-git"* ]]; then
+        setup__git
+    fi
+    if [[ "$@" != *"--no-playonlinux"* ]]; then
+        setup__playonlinux
+    fi
+    if [[ "$@" != *"--no-i3"* ]]; then
+        setup__i3
+    fi
+}
+
+main $@

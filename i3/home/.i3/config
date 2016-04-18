@@ -31,6 +31,8 @@ floating_modifier $mod
 
 # start a terminal
 bindsym $mod+Return exec gnome-terminal
+bindsym $mod+n exec nautilus
+bindsym $mod+Escape exec shutdown -h now
 
 # kill focused window
 bindsym $mod+Shift+q kill
@@ -40,7 +42,7 @@ bindsym $mod+d exec dmenu_run
 # There also is the (new) i3-dmenu-desktop which only displays applications
 # shipping a .desktop file. It is a wrapper around dmenu, so you need that
 # installed.
-# bindsym $mod+d exec --no-startup-id i3-dmenu-desktop
+bindsym $mod+Shift+d exec --no-startup-id i3-dmenu-desktop
 
 # change focus
 bindsym $mod+j focus left
@@ -188,8 +190,22 @@ bindsym $mod+m mode "mouse"
 # finds out, if available)
 bar {
 	position top
-  status_command i3blocks
+	status_command i3blocks -c ~/.i3/i3blocks.conf
+    colors {
+        separator #268bd2
+        background #002b36
+        statusline #839496
+        focused_workspace #fdf6e3 #6c71c4 #fdf6e3
+        active_workspace #fdf6e3 #6c71c4 #fdf6e3
+        inactive_workspace #002b36 #586e75 #002b36
+        urgent_workspace #d33682 #d33682 #fdf6e3
+    }
 }
+
+client.focused #6c71c4 #6c71c4 #fdf6e3 #6c71c4
+client.focused_inactive #073642 #073642 #eee8d5 #6c71c4
+client.unfocused #073642 #073642 #93a1a1 #586e75
+client.urgent #d33682 #d33682 #fdf6e3 #dc322f
 
 # Pulse Audio controls
 bindsym XF86AudioRaiseVolume exec --no-startup-id pactl set-sink-volume 1 +5% #increase sound volume
@@ -216,5 +232,5 @@ bindsym XF86AudioPause exec playerctl pause
 bindsym XF86AudioNext exec playerctl next
 bindsym XF86AudioPrev exec playerctl previous
 
-exec --no-startup-id feh --bg-fill ~/Pictures/i3background.jpg
-exec --no-startup-id compton --config ~/.config/i3/compton.conf -b
+exec --no-startup-id feh --bg-fill ~/.i3/background.jpg
+exec --no-startup-id compton --config ~/.i3/compton.conf -CGb

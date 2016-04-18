@@ -1,7 +1,7 @@
 #!/bin/sh
 
 i3-msg workspace 2
-i3-msg layout stacking
+i3-msg layout tabbed
 i3-exec-wait gnome-terminal
 i3-exec-wait atom
 sleep 2
@@ -20,4 +20,3 @@ sleep 2
 i3-msg workspace 1
 i3-msg layout default
 i3-exec-wait google-chrome
-
